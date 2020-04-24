@@ -1,0 +1,13 @@
+<h1>Start a new quiz</h1>
+<form action="/newgame" method="post">
+    <label for="G_Name">Quiz Name</label>
+    <input type="text" id="G_Name" name="G_Name" autofocus="autofocus" />
+    <label for="P_Name">Your Name</label>
+    <input type="text" id="P_Name" name="P_Name" />
+    <label for="Password">Password</label>
+    <input type="password" id="Password" name="Password" />
+    <button type="submit" name="Submit" value="Login">Enter!</button>
+</form>
+<?php if ( $errorMessage ) { ?>
+    <p><?=$errorMessage?></p>
+<?php } ?>

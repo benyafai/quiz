@@ -1,0 +1,11 @@
+# Basic
+.env
+/db_data
+/vendor
+/public/uploads/*
+!/public/uploads/.uploads
+
+# Local
+docker-compose.override.yml
+/.nova
+.DS_Store

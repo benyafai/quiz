@@ -1,0 +1,55 @@
+version: '3.3'
+services:
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "33067:3306"
+    networks:
+      - quiz
+  app:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    restart: always
+    volumes:
+      - .:/var/www/html
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.quiz.rule=Host(`${HOSTNAME}`)"
+      - "traefik.http.routers.quiz.entrypoints=websecure"
+      - "traefik.http.routers.quiz.tls.certresolver=myresolver"
+      - "traefik.http.routers.quiz.middlewares=quiz@docker"
+      - "traefik.http.middlewares.quiz.headers.frameDeny=true"
+      - "traefik.http.middlewares.quiz.headers.sslRedirect=true"
+      - "traefik.http.middlewares.quiz.headers.contentTypeNosniff=true"
+      - "traefik.http.middlewares.quiz.headers.browserXSSFilter=true"
+      - "traefik.http.middlewares.quiz.headers.forceSTSHeader=true"
+      - "traefik.http.middlewares.quiz.headers.STSSeconds=315360000"
+      - "traefik.http.middlewares.quiz.headers.STSIncludeSubdomains=true"
+      - "traefik.http.middlewares.quiz.headers.STSPreload=true"
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      LOGIN: ${LOGIN}
+      JWT: ${JWT_SECRET}
+    networks:
+      - quiz
+      - web
+networks:
+  quiz:
+  web:
+    external: true
+volumes:
+  db_data:

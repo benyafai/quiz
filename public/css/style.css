@@ -1,0 +1,128 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    color: black;
+}
+.container {
+    width: 90vw;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+}
+a:hover {
+    text-decoration: underline;
+}
+body {
+    padding-bottom: 100px;
+}
+input,
+textarea,
+select,
+button {
+    width: 100%;
+    display: inline-block;
+    font-size: 1em;
+    padding: 0.5em 1em;
+    margin: 0.5em 0em;
+}
+.Rounds,
+.Questions,
+.Answers {
+    padding: 0.5em 0em 0.5em 1em;
+    /* background: rgb(135,206,250,0.3); */
+    position: relative;
+}
+.currentQuestion,
+.currentQuestion .Answers {
+    background: rgb(144,238,144,0.3);
+}
+.Rounds,
+.Questions {
+    border-top: 3px solid black;
+}
+.Rounds p {
+    margin: 0;
+}
+p.Question {
+    font-size: 1em;
+    font-weight: bold;
+}
+p.TheAnswer {
+    font-size: 0.8em;
+}
+.setQuestion {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.getAnswers {
+    position: absolute;
+    top: 0;
+    right: 30%;
+
+}
+.Answers {
+    display: grid;
+    grid-template-columns: 4fr 6fr 2fr;
+    grid-template-rows: auto;
+    border-bottom: 0.1em solid black;
+}
+.Answers:last-child {
+    border-bottom: none;
+}
+#quizPlayer,
+#Scoring,
+#Q_Image,
+#Q_Sound {
+    display: none;
+}
+.hostScoring {
+    padding: 0.5em 0em 0.5em 1em;
+}
+table {
+    width: 100%;
+    table-layout: fixed;
+    text-align: center;
+    border-collapse: collapse;
+}
+table thead tr th,
+table tbody tr td {
+    padding: 0.5em 0em 0.5em 1em;
+    border-bottom: 0.1em solid black;
+}
+table thead tr th {
+    border-bottom-width: 0.2em;
+}
+table thead tr th:first-of-type,
+table tbody tr td:first-of-type {
+    text-align: left;
+}
+.marking {
+    color: grey;
+}
+.marking.current {
+    color: black;
+    font-weight: bold;;
+}
+.endQuiz {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.hostImage {
+    height: 100px;
+}
+.playerImage {
+    max-height: 50vh;
+    max-width: 90vw;
+}
+.hostScoring {
+    position: relative;
+    border-top: 0.2em solid black;
+    margin-top: 2em;
+}
+#ScoreData p span {
+    width: 30vw;
+    display: inline-block;
+}

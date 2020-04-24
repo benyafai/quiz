@@ -1,0 +1,93 @@
+<a href=""><h1><?=$Game->G_Name?></h1></a>
+<a class="endQuiz" href="/end/<?=$Host->G_ID?>">End Quiz</a>
+<h3><?=$Host->P_Name?> (Host)</h3>
+<p>Join link: <input class="joinLink" type="text" value="https://<?=$_SERVER['HTTP_HOST']?>/join/<?=$Host->G_ID?>" /></p>
+<div class="hostScoring <?=$currentQuestion=='Begin'?'currentQuestion':''?>">
+    <a class="setScoring" href="/setQuestion/Begin">Start page & Question editing</a>
+</div>
+<hr />
+<?php foreach ( $Rounds as $Round ) : ?>
+    <div class="quizHost Rounds">
+        <h2 class="Round"><?=$Round->R_Round?></h2>
+        <?php foreach ( $Questions as $Question ) : ?>
+            <?php if ( $Question->R_ID == $Round->R_ID ) : ?>
+                <div class="quizHost Questions <?=$currentQuestion==$Question->Q_ID?'currentQuestion':''?>" id="<?=$currentQuestion==$Question->Q_ID?'scroll':''?>">
+                    <?php if ( $Question->Q_Image ) { ?>
+                        <p class="Question"><?=$Question->Q_Order?>) <img class="hostImage" src="/uploads/<?=$Question->Q_Image?>" /></p>
+                    <?php } else if ( $Question->Q_Sound ) { ?>
+                        <p class="Question"><?=$Question->Q_Order?>)</p>
+                        <audio controls>
+                            <source src="/uploads/<?=$Question->Q_Sound?>" type="audio/mp4">
+                            Your browser does not support the audio element.
+                        </audio>
+                    <?php } else { ?>
+                        <p class="Question"><?=$Question->Q_Order?>) <?=$Question->Q_Question?></p>
+                    <?php } ?>
+                    <p class="TheAnswer">( Our Answer: <?=$Question->Q_Answer?> )</p>
+                    <a class="setQuestion" href="/setQuestion/<?=$Question->Q_ID?>">Set Current Question</a>
+                    <a class="getAnswers" href="/">Refresh Answers</a>
+                    <h5>Answers</h5>
+                    <?php foreach ( $Players as $Player ) : ?>
+                        <div class="quizHost Answers">
+                            <p class="Player"><?=$Player->P_Name?></p>
+                            <?php foreach ( $Answers as $Answer ) : ?>
+                                <?php if ( $Answer->Q_ID == $Question->Q_ID && $Answer->P_ID == $Player->P_ID ) : ?>
+                                    <p class="Answer"><?=$Answer->A_Answer?></p>
+                                    <div>
+                                        <?php for ($x = 0; $x <= $Question->Q_Points; $x++) { ?>
+                                            <a class="marking <?=$Answer->A_Correct==$x&&$Answer->A_Correct!=null?'current':''?>" href="/marking/<?=$Answer->A_ID.'/'.$x ?>">(<?=$x?>)</a>
+                                        <?php } ?>
+                                    </div>
+                                <?php endif; // Answer ?>
+                            <?php endforeach; // Answers ?>
+                        </div>
+                    <?php endforeach; // Players ?>
+                </div>
+            <?php endif; // Question ?>
+        <?php endforeach; // Questions ?>
+        <?php if ( $currentQuestion=='Begin' ) { ?>
+            <form action="/add" method="post" enctype="multipart/form-data">
+                <label for="Q_Question">Add Question to <?=$Round->R_Round?> round</label>
+                <input type="text" id="Q_Question" name="Q_Question" placeholder="Question" required/>
+                <input type="file" name="Q_Image" />
+                <input type="text" id="Q_Answer" name="Q_Answer" placeholder="Answer (for you only, players will not see this)" required/>
+                <input type="number" id="Q_Points" name="Q_Points" placeholder="How many points is the answer worth?" min="1" max="5" required/>
+                <input type="hidden" name="R_ID" value="<?=$Round->R_ID?>" />
+                <button type="submit" name="Submit" value="Question">Add question to <?=$Round->R_Round?> round</button>
+            </form>
+        <?php } ?>
+    </div>
+<?php endforeach; // Rounds ?>
+<?php if ( $currentQuestion=='Begin' ) { ?>
+    <form action="/add" method="post">
+        <label for="R_Round">Add Round</label>
+        <input type="text" id="R_Round" name="R_Round" placeholder="New round" />
+        <button type="submit" name="Submit" value="Round">Add round</button>
+    </form>
+<?php } ?>
+<div class="hostScoring <?=$currentQuestion=='Scoring'?'currentQuestion':''?>" id="<?=$currentQuestion=='Scoring'?'scroll':''?>">
+    <h2>Scores</h2>
+    <a class="setQuestion" href="/setQuestion/Scoring">Show everybody the scoring page</a>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="3">Name</th>
+                <th>Score</th>
+                <th>Possible</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ( $Scores as $Score ) : ?>
+                <tr>
+                    <td colspan="3"><?=$Score->P_Name?></td>
+                    <td><?=$Score->A_Correct?></td>
+                    <td><?=$Score->Q_Possible?></td>
+                    <td><a href="/player/<?=$Score->P_ID?>/host">Make host</a></td>
+                    <td><a href="/player/<?=$Score->P_ID?>/kick">Remove player</a></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
