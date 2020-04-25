@@ -18,7 +18,10 @@
                 <div class="quizHost Questions <?=$currentQuestion==$Question->Q_ID?'currentQuestion':''?>" id="<?=$currentQuestion==$Question->Q_ID?'scroll':''?>">
                     <?php if ( $Question->Q_Image_Question ) { ?>
                         <p class="Question"><img class="hostImage" src="/uploads/<?=$Question->Q_Image_Question?>" />
-                        <img class="hostImage" src="/uploads/<?=$Question->Q_Image_Answer?>" /></p>
+                            <?php if ( $Question->Q_Image_Answer ) { ?>
+                                <img class="hostImage" src="/uploads/<?=$Question->Q_Image_Answer?>" />
+                            <?php } ?>
+                        </p>
                     <?php } else if ( $Question->Q_Sound_Question ) { ?>
                         <p class="Question"><?=$Question->Q_Order?>)</p>
                         <audio controls>

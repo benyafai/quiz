@@ -180,12 +180,12 @@ $app->map(['GET', 'POST'], '/ajax', function (Request $request, Response $respon
         ];
         if ( $Question->Q_Image_Question ) {
             $payload["Q_Image_Question"] = $Question->Q_Image_Question;
-            if ( $Game->G_ShowAnswers == 1 ) {
+            if ( $Game->G_ShowAnswers == 1 && $Question->Q_Image_Answer ) {
                 $payload["Q_Image_Answer"] = $Question->Q_Image_Answer;
             }
         } else if ( $Question->Q_Sound_Question ) {
             $payload["Q_Sound_Question"] = $Question->Q_Sound_Question;
-            if ( $Game->G_ShowAnswers == 1 ) {
+            if ( $Game->G_ShowAnswers == 1 && $Question->Q_Sound_Answer ) {
                 $payload["Q_Sound_Answer"] = $Question->Q_Sound_Answer;
             }
         } else {

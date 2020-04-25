@@ -2,6 +2,7 @@ FROM php:7.4.5-apache
 
 COPY . /src
 COPY .docker/vhost.conf /etc/apache2/sites-available/000-default.conf
+ADD .docker/quiz.ini /usr/local/etc/php/conf.d
 
 RUN rm -rf /var/www/html && mv /src /var/www/html &&\
     chown -R www-data:www-data /var/www/html/ &&\

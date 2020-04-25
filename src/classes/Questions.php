@@ -3,7 +3,7 @@ use Psr\Http\Message\UploadedFileInterface;
 class Questions extends Common {
  
     public function getRounds() {
-        $sql = "SELECT * FROM rounds WHERE G_ID = :G_ID ORDER BY R_Order";
+        $sql = "SELECT * FROM rounds WHERE G_ID = :G_ID ORDER BY R_Order ASC";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute([
             "G_ID" => $this->Player->G_ID,
@@ -30,7 +30,7 @@ class Questions extends Common {
         $sql = "SELECT MAX(R_Order) FROM rounds WHERE G_ID = :G_ID";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute([
-            "G_ID" => $Player->G_ID,
+            "G_ID" => $this->Player->G_ID,
         ]);
         $Max = $stmt->fetchColumn();
         if ( !$Max ) {

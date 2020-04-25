@@ -47,6 +47,7 @@ button {
 p.Question {
     font-size: 1em;
     font-weight: bold;
+    margin-top: 1em;
 }
 p.TheAnswer {
     font-size: 0.8em;
@@ -114,7 +115,8 @@ table tbody tr td:first-of-type {
     right: 0;
 }
 .hostImage {
-    height: 100px;
+    height: 6em;
+    padding-right: 1em;
 }
 .playerImage {
     max-width: 40vw;
