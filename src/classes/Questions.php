@@ -48,7 +48,7 @@ class Questions extends Common {
         ]);
     }
 
-    public function addQuestion( $data, $uploadedFile = null ) {
+    public function addQuestion( $data, $questionFile = null, $answerFile = null ) {
         $sql = "SELECT MAX(Q_Order) FROM questions WHERE R_ID = :R_ID";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute([
@@ -60,27 +60,40 @@ class Questions extends Common {
         } else {
             $Order = $Max +1;
         }
-        if ( $uploadedFile && $uploadedFile->getError() === UPLOAD_ERR_OK ) {
-            if ($uploadedFile->getClientMediaType() == 'image/png' ||
-                $uploadedFile->getClientMediaType() == 'image/jpeg' ) {
-                $image = $this->moveUploadedFile( $uploadedFile );
-            } else if ( $uploadedFile->getClientMediaType() == 'audio/x-m4a' ) {
-                $sound = $this->moveUploadedFile( $uploadedFile );
+        if ( $questionFile && $questionFile->getError() === UPLOAD_ERR_OK ) {
+            if ($questionFile->getClientMediaType() == 'image/png' ||
+                $questionFile->getClientMediaType() == 'image/jpeg' ) {
+                $image_q = $this->moveUploadedFile( $questionFile );
+            } else if ( $questionFile->getClientMediaType() == 'audio/x-m4a' ) {
+                $sound_q = $this->moveUploadedFile( $questionFile );
             } else {
                 die("We can't support that file type, go back and try again");
             }
         }
-        $sql = "INSERT INTO questions ( Q_ID, R_ID, Q_Question, Q_Answer, Q_Order, Q_Image, Q_Sound, Q_Video, Q_Points )
-                VALUES ( UUID(), :R_ID, :Q_Question, :Q_Answer, :Q_Order, :Q_Image, :Q_Sound, :Q_Video, :Q_Points ); ";
+        if ( $answerFile && $answerFile->getError() === UPLOAD_ERR_OK ) {
+            if ($answerFile->getClientMediaType() == 'image/png' ||
+                $answerFile->getClientMediaType() == 'image/jpeg' ) {
+                $image_a = $this->moveUploadedFile( $answerFile );
+            } else if ( $answerFile->getClientMediaType() == 'audio/x-m4a' ) {
+                $sound_a = $this->moveUploadedFile( $answerFile );
+            } else {
+                die("We can't support that file type, go back and try again");
+            }
+        }
+        $sql = "INSERT INTO questions ( Q_ID, R_ID, Q_Question, Q_Answer, Q_Order, Q_Image_Question, Q_Image_Answer, Q_Sound_Question, Q_Sound_Answer, Q_Video_Question, Q_Video_Answer, Q_Points )
+                VALUES ( UUID(), :R_ID, :Q_Question, :Q_Answer, :Q_Order, :Q_Image_Question, :Q_Image_Answer, :Q_Sound_Question, :Q_Sound_Answer, :Q_Video_Question, :Q_Video_Answer, :Q_Points ); ";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute([
             "R_ID" => $data['R_ID'], 
             "Q_Question" => $data['Q_Question'], 
             "Q_Answer" => $data['Q_Answer'], 
             "Q_Order" => $Order,
-            "Q_Image" => $image ? $image : null,
-            "Q_Sound" => $sound ? $sound : null,
-            "Q_Video" => $video ? $video : null,
+            "Q_Image_Question" => $image_q ? $image_q : null,
+            "Q_Image_Answer" => $image_a ? $image_a : null,
+            "Q_Sound_Question" => $sound_q ? $sound_q : null,
+            "Q_Sound_Answer" => $sound_a ? $sound_a : null,
+            "Q_Video_Question" => $video_q ? $video_q : null,
+            "Q_Video_Answer" => $video_q ? $video_a : null,
             "Q_Points" => $data['Q_Points'],
         ]);
     }
@@ -95,7 +108,7 @@ class Questions extends Common {
     }
 
     public function currentQuestion( $Q_ID ) {
-        $sql = "SELECT r.R_Round, r.R_Order, q.Q_ID, q.Q_Question, q.Q_Order, q.Q_Image, q.Q_Sound
+        $sql = "SELECT r.R_Round, r.R_Order, q.Q_ID, q.Q_Question, q.Q_Answer, q.Q_Order, q.Q_Image_Question, q.Q_Image_Answer, q.Q_Sound_Question, q.Q_Sound_Answer
                 FROM questions q 
                 LEFT JOIN rounds r ON q.R_ID = r.R_ID
                 WHERE q.Q_ID = :Q_ID

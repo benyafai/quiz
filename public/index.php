@@ -16,7 +16,6 @@ $app->add(function (Request $request, RequestHandler $handler) {
 });
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, true, true);
-
 $app->post('/newgame', function (Request $request, Response $response) {
     $G = new Games();
     $data = $request->getParsedBody();
@@ -175,16 +174,25 @@ $app->map(['GET', 'POST'], '/ajax', function (Request $request, Response $respon
         $Answer = $A->getAnswer( $currentQuestion );
         $payload = [
             "R_Round" => $Question->R_Round,
-            "Q_Question" => $Question->Q_Order.") ",
+            "Q_Question" => "",
             "Question_ID" => $Question->Q_ID,
             "A_Answer" => $Answer->A_Answer,
         ];
-        if ( $Question->Q_Image ) {
-            $payload["Q_Image"] = $Question->Q_Image;
-        } else if ( $Question->Q_Sound ) {
-            $payload["Q_Sound"] = $Question->Q_Sound;
+        if ( $Question->Q_Image_Question ) {
+            $payload["Q_Image_Question"] = $Question->Q_Image_Question;
+            if ( $Game->G_ShowAnswers == 1 ) {
+                $payload["Q_Image_Answer"] = $Question->Q_Image_Answer;
+            }
+        } else if ( $Question->Q_Sound_Question ) {
+            $payload["Q_Sound_Question"] = $Question->Q_Sound_Question;
+            if ( $Game->G_ShowAnswers == 1 ) {
+                $payload["Q_Sound_Answer"] = $Question->Q_Sound_Answer;
+            }
         } else {
             $payload['Q_Question'] .= $Question->Q_Question;    
+        }
+        if ( $Game->G_ShowAnswers == 1 ) {
+            $payload["Q_Answer"] = "The answer: ".$Question->Q_Answer;
         }
     }
     $response->getBody()->write(json_encode($payload));
@@ -203,7 +211,8 @@ $app->post('/add', function (Request $request, Response $response) {
     } 
     $data = $request->getParsedBody();
     $uploadedFiles = $request->getUploadedFiles();
-    $uploadedFile = $uploadedFiles['Q_Image'];
+    $questionFile = $uploadedFiles['questionFile'];
+    $answerFile = $uploadedFiles['answerFile'];
     switch ( $data['Submit'] ) {
         case "Round":
             $Q = new Questions();
@@ -211,7 +220,7 @@ $app->post('/add', function (Request $request, Response $response) {
             break;
         case "Question":
             $Q = new Questions();
-            $Q->addQuestion( $data, $uploadedFile );
+            $Q->addQuestion( $data, $questionFile, $answerFile );
             break;
     }
     return $response
@@ -233,6 +242,21 @@ $app->get('/setQuestion/{Question}', function (Request $request, Response $respo
         ->withHeader('Location', '/game/'.$Player->G_ID.'#scroll')
         ->withStatus(401);
 })->setName('setQuestion');
+
+$app->get('/showAnswers/{showHide}', function (Request $request, Response $response, $showHide) {
+    $G = new Games();
+    $Player = $G->checkPlayer();
+    $Game = $G->getGame( $Player->G_ID );
+    if ( !$Player || !$Game ) { 
+        return $response
+            ->withHeader('Location', '/')
+            ->withStatus(401);
+    } 
+    $G->showAnswers( $showHide );
+    return $response
+        ->withHeader('Location', '/game/'.$Player->G_ID.'#scroll')
+        ->withStatus(401);
+})->setName('showAnswers');
 
 $app->get('/marking/{A_ID}/{A_Correct}', function (Request $request, Response $response, $A_ID, $A_Correct) {
     $G = new Games();

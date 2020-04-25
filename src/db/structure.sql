@@ -83,7 +83,7 @@ CREATE TABLE `questions` (
   `Q_Question` text NOT NULL,
   `Q_Answer` text NOT NULL,
   `Q_Order` int NOT NULL,
-  `Q_Image` text,
+  `Q_Image_Question` text,
   `Q_Sound` text,
   `Q_Video` text,
   `Q_Points` int NOT NULL DEFAULT '1',

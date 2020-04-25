@@ -4,8 +4,13 @@
 <div id="quizPlayer">
     <h2 id="R_Round"></h2>
     <h3 id="Q_Question"></h3>
-    <img id="Q_Image" class="playerImage" src="" />
-    <audio id="Q_Sound" controls>
+    <img id="Q_Image_Question" class="playerImage" src="" />
+    <img id="Q_Image_Answer" class="playerImage" src="" />
+    <audio id="Q_Sound_Question" controls>
+        <source src="" type="audio/mp4">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="Q_Sound_Answer" controls>
         <source src="" type="audio/mp4">
         Your browser does not support the audio element.
     </audio>
@@ -14,6 +19,7 @@
         <input id="Q_ID" type="hidden" name="Q_ID" value="" />
         <button id="Submit" type="Submit" onclick="submitForm();">Send Answer</button>
     </form>
+    <input id="Q_Answer" type="text" value="" disabled />
 </div>
 <div id="Scoring">
     <h2>Scores</h2>

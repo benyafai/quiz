@@ -73,8 +73,11 @@ p.TheAnswer {
 }
 #quizPlayer,
 #Scoring,
-#Q_Image,
-#Q_Sound {
+#Q_Image_Question,
+#Q_Image_Answer,
+#Q_Sound_Question, 
+#Q_Sound_Answer,
+#Q_Answer {
     display: none;
 }
 .hostScoring {
@@ -114,8 +117,7 @@ table tbody tr td:first-of-type {
     height: 100px;
 }
 .playerImage {
-    max-height: 50vh;
-    max-width: 90vw;
+    max-width: 40vw;
 }
 .hostScoring {
     position: relative;
@@ -125,4 +127,19 @@ table tbody tr td:first-of-type {
 #ScoreData p span {
     width: 30vw;
     display: inline-block;
+}
+.answerMessage {
+    position: fixed;
+    top: 1em;
+    left: 50%;
+    width: 20em;
+    margin-left: -10em;
+    text-align: center;
+    background: white;
+    border: 0.1em solid firebrick;
+    z-index: 20;
+}
+.answerMessage p {
+    background: white;
+    color: firebrick;
 }

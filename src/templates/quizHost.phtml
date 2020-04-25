@@ -3,7 +3,11 @@
 <h3><?=$Host->P_Name?> (Host)</h3>
 <p>Join link: <input class="joinLink" type="text" value="https://<?=$_SERVER['HTTP_HOST']?>/join/<?=$Host->G_ID?>" /></p>
 <div class="hostScoring <?=$currentQuestion=='Begin'?'currentQuestion':''?>">
-    <a class="setScoring" href="/setQuestion/Begin">Start page & Question editing</a>
+    <a class="setScoring" href="/setQuestion/Begin">Start page & Question editing</a><br /><br />
+    <a class="showAnswers" href="/showAnswers/<?=$Game->G_ShowAnswers==1?0:1?>"><?=$Game->G_ShowAnswers==1?'Hide':'Show'?> answers to all players</a>
+</div>
+<div class="answerMessage" style="display:<?=$Game->G_ShowAnswers==1?'block':'none'?>;">
+    <p>Players can see the answers!</p>
 </div>
 <hr />
 <?php foreach ( $Rounds as $Round ) : ?>
@@ -12,18 +16,23 @@
         <?php foreach ( $Questions as $Question ) : ?>
             <?php if ( $Question->R_ID == $Round->R_ID ) : ?>
                 <div class="quizHost Questions <?=$currentQuestion==$Question->Q_ID?'currentQuestion':''?>" id="<?=$currentQuestion==$Question->Q_ID?'scroll':''?>">
-                    <?php if ( $Question->Q_Image ) { ?>
-                        <p class="Question"><?=$Question->Q_Order?>) <img class="hostImage" src="/uploads/<?=$Question->Q_Image?>" /></p>
-                    <?php } else if ( $Question->Q_Sound ) { ?>
+                    <?php if ( $Question->Q_Image_Question ) { ?>
+                        <p class="Question"><img class="hostImage" src="/uploads/<?=$Question->Q_Image_Question?>" />
+                        <img class="hostImage" src="/uploads/<?=$Question->Q_Image_Answer?>" /></p>
+                    <?php } else if ( $Question->Q_Sound_Question ) { ?>
                         <p class="Question"><?=$Question->Q_Order?>)</p>
                         <audio controls>
-                            <source src="/uploads/<?=$Question->Q_Sound?>" type="audio/mp4">
+                            <source src="/uploads/<?=$Question->Q_Sound_Question?>" type="audio/mp4">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <audio controls>
+                            <source src="/uploads/<?=$Question->Q_Sound_Answer?>" type="audio/mp4">
                             Your browser does not support the audio element.
                         </audio>
                     <?php } else { ?>
-                        <p class="Question"><?=$Question->Q_Order?>) <?=$Question->Q_Question?></p>
+                        <p class="Question"><?=$Question->Q_Question?></p>
                     <?php } ?>
-                    <p class="TheAnswer">( Our Answer: <?=$Question->Q_Answer?> )</p>
+                    <p class="TheAnswer">( Our Answer: <?=$Question->Q_Answer?> ) ( Max Points: <?=$Question->Q_Points?> )</p>
                     <a class="setQuestion" href="/setQuestion/<?=$Question->Q_ID?>">Set Current Question</a>
                     <a class="getAnswers" href="/">Refresh Answers</a>
                     <h5>Answers</h5>
@@ -49,8 +58,9 @@
             <form action="/add" method="post" enctype="multipart/form-data">
                 <label for="Q_Question">Add Question to <?=$Round->R_Round?> round</label>
                 <input type="text" id="Q_Question" name="Q_Question" placeholder="Question" required/>
-                <input type="file" name="Q_Image" />
-                <input type="text" id="Q_Answer" name="Q_Answer" placeholder="Answer (for you only, players will not see this)" required/>
+                <input type="file" name="questionFile" />
+                <input type="text" id="" name="Q_Answer" placeholder="Answer (for you only, players will not see this)" required/>
+                <input type="file" name="answerFile" />
                 <input type="number" id="Q_Points" name="Q_Points" placeholder="How many points is the answer worth?" min="1" max="5" required/>
                 <input type="hidden" name="R_ID" value="<?=$Round->R_ID?>" />
                 <button type="submit" name="Submit" value="Question">Add question to <?=$Round->R_Round?> round</button>

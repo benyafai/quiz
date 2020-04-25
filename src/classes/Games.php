@@ -54,4 +54,13 @@ class Games extends Common {
         ]);
     }
     
+    public function showAnswers( $G_ShowAnswers ) {
+        $sql = "UPDATE games SET G_ShowAnswers = :G_ShowAnswers WHERE G_ID = :G_ID ";
+        $stmt = $this->db->prepare( $sql );
+        $stmt->execute([
+            "G_ShowAnswers" => $G_ShowAnswers,
+            "G_ID" => $this->Player->G_ID,
+        ]);
+    }
+    
 }

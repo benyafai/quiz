@@ -36,21 +36,44 @@ function doAjax() {
             } else if ( data.Question_ID ) {
                 $('#quizPlayer').show()
                 $('#Scoring').hide()
+                if ( data.Q_Answer && data.Q_Answer.length ) {
+                    $('#Q_Answer').val(data.Q_Answer);
+                    $('#Q_Answer').show();
+                    if ( data.Q_Image_Answer && data.Q_Image_Answer.length ) {
+                        $('#Q_Image_Answer').show()
+                        $('#Q_Image_Answer').attr("src","/uploads/"+data.Q_Image_Answer);
+                    } else {
+                        $('#Q_Image_Answer').attr("src","");
+                        $('#Q_Image_Answer').hide()
+                    }
+                    if ( data.Q_Sound_Answer && data.Q_Sound_Answer.length ) {
+                        $('#Q_Sound_Answer').show()
+                        $('#Q_Sound_Answer').attr("src","/uploads/"+data.Q_Sound_Answer);
+                    } else {
+                        $('#Q_Sound_Answer').attr("src","");
+                        $('#Q_Sound_Answer').hide()
+                    }
+                } else {
+                    $('#Q_Answer').val('');
+                    $('#Q_Answer').hide();
+                    $('#Q_Image_Answer').hide();
+                    $('#Q_Sound_Answer').hide();
+                }
                 if ( data.Question_ID != $('#Q_ID').val() ) {
                     $('#R_Round').text(data.R_Round);
                     $('#Q_Question').text(data.Q_Question);
                     $('#Q_ID').val(data.Question_ID);
-                    if ( data.Q_Image && data.Q_Image.length ) {
-                        $('#Q_Image').show()
-                        $('#Q_Image').attr("src","/uploads/"+data.Q_Image);
+                    if ( data.Q_Image_Question && data.Q_Image_Question.length ) {
+                        $('#Q_Image_Question').show()
+                        $('#Q_Image_Question').attr("src","/uploads/"+data.Q_Image_Question);
                     } else {
-                        $('#Q_Image').hide()
+                        $('#Q_Image_Question').hide()
                     }
-                    if ( data.Q_Sound && data.Q_Sound.length ) {
-                        $('#Q_Sound').show()
-                        $('#Q_Sound').attr("src","/uploads/"+data.Q_Sound);
+                    if ( data.Q_Sound_Question && data.Q_Sound_Question.length ) {
+                        $('#Q_Sound_Question').attr("src","/uploads/"+data.Q_Sound_Question);
+                        $('#Q_Sound_Question').show()
                     } else {
-                        $('#Q_Sound').hide()
+                        $('#Q_Sound_Question').hide()
                     }
                     if ( data.A_Answer && data.A_Answer.length ) {
                         $('#A_Answer').val(data.A_Answer);
@@ -61,7 +84,7 @@ function doAjax() {
                         $('#A_Answer').prop('disabled', false);
                         $('#Submit').show()
                         $('#A_Answer').focus()
-                    }
+                    } 
                 }
             }
         },
