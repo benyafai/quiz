@@ -2,10 +2,13 @@
 class Scores extends Common {
 
     public function allScores() {
-        $sql = "SELECT p.P_Name, p.P_ID, SUM(a.A_Correct) AS A_Correct, SUM(q.Q_Points) AS Q_Possible
+        $sql = "SELECT p.P_Name, p.P_ID, SUM(a.A_Correct) AS A_Correct, 
+                ( SELECT SUM(z.Q_Points) FROM questions z 
+                LEFT JOIN rounds x ON z.R_ID = x.R_ID WHERE x.G_ID = a.G_ID) AS Q_Possible
                 FROM answers a
                 LEFT JOIN players p ON a.P_ID = p.P_ID
                 LEFT JOIN questions q ON a.Q_ID = q.Q_ID
+                LEFT JOIN questions s ON s.Q_ID = a.G_ID
                 WHERE a.G_ID = :G_ID
                 GROUP BY P_Name, P_ID
                 ORDER BY A_Correct DESC, P_Name ASC";

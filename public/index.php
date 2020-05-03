@@ -41,6 +41,13 @@ $app->post('/newgame', function (Request $request, Response $response) {
 
 $app->map(['GET', 'POST'], '/join/{activeGame}', function (Request $request, Response $response, $activeGame) {
     $G = new Games();
+    $Player = $G->checkPlayer();
+    $Game = $G->getGame( $Player->G_ID );
+    if ( $Player && $Game ) {
+        return $response
+            ->withHeader('Location', '/game/'.$Player->G_ID.'#scroll')
+            ->withStatus(200);
+    }
     $Game = $G->getGame( $activeGame );
     if ( $Game ) {
         if ( $request->getMethod() == 'POST') {
@@ -199,6 +206,33 @@ $app->map(['GET', 'POST'], '/ajax', function (Request $request, Response $respon
     return $response
         ->withHeader('Content-Type', 'application/json');
 })->setName('ajax');
+
+$app->map(['GET', 'POST'], '/ajaxHost/{Q_ID}', function (Request $request, Response $response, $Q_ID ) {
+    $G = new Games();
+    $Player = $G->checkPlayer();
+    $Game = $G->getGame( $Player->G_ID );
+    if ( !$Player || !$Game ) { 
+        setcookie('Player', null, time() -10, "/");
+        $payload = [
+            "Refresh" => "Refresh",
+        ];
+        $response->getBody()->write(json_encode($payload));
+        return $response
+            ->withHeader('Content-Type', 'application/json');
+    } 
+    $currentQuestion = $G->currentQuestion();
+    if ( $Player->P_Host == 0 || $currentQuestion == 'Begin' || $currentQuestion == 'Scoring') {
+        $payload = [
+        ];
+    } else {
+        $A = new Answers();
+        $Answers = $A->getAnswersForQuestion( $Q_ID );
+        $payload = $Answers;
+    }
+    $response->getBody()->write(json_encode($payload));
+    return $response
+        ->withHeader('Content-Type', 'application/json');
+})->setName('ajaxHost');
 
 $app->post('/add', function (Request $request, Response $response) {
     $G = new Games();

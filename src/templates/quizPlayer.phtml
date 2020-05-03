@@ -15,7 +15,7 @@
         Your browser does not support the audio element.
     </audio>
     <form name="quizPlayer" action="/game/<?=$Game->G_ID?>" method="post" onsubmit="return false">
-        <input id="A_Answer" type="text" name="A_Answer" value="" autocomplete="off" onKeyPress="enterSubmit(event);" />
+        <input id="A_Answer" type="text" name="A_Answer" value="" required="required" autocomplete="off" onKeyPress="enterSubmit(event);" />
         <input id="Q_ID" type="hidden" name="Q_ID" value="" />
         <button id="Submit" type="Submit" onclick="submitForm();">Send Answer</button>
     </form>
@@ -27,4 +27,4 @@
     </div>
 </div>
 <script src="/js/jQuery.js"></script>
-<script src="/js/quiz.js"></script>
+<script src="/js/players.js"></script>

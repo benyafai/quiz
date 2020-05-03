@@ -1,4 +1,4 @@
-FROM php:7.4.5-apache
+FROM php:apache
 
 COPY . /src
 COPY .docker/vhost.conf /etc/apache2/sites-available/000-default.conf
