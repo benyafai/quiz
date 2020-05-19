@@ -25,19 +25,19 @@ services:
     volumes:
       - .:/var/www/html
     labels:
+      - "traefik.docker.network=web"
       - "traefik.enable=true"
-      - "traefik.http.routers.quiz.rule=Host(`${HOSTNAME}`)"
-      - "traefik.http.routers.quiz.entrypoints=websecure"
-      - "traefik.http.routers.quiz.tls.certresolver=myresolver"
-      - "traefik.http.routers.quiz.middlewares=quiz@docker"
-      - "traefik.http.middlewares.quiz.headers.frameDeny=true"
-      - "traefik.http.middlewares.quiz.headers.sslRedirect=true"
-      - "traefik.http.middlewares.quiz.headers.contentTypeNosniff=true"
-      - "traefik.http.middlewares.quiz.headers.browserXSSFilter=true"
-      - "traefik.http.middlewares.quiz.headers.forceSTSHeader=true"
-      - "traefik.http.middlewares.quiz.headers.STSSeconds=315360000"
-      - "traefik.http.middlewares.quiz.headers.STSIncludeSubdomains=true"
-      - "traefik.http.middlewares.quiz.headers.STSPreload=true"
+      - "traefik.basic.frontend.rule=Host:${HOSTNAME}"
+      - "traefik.basic.port=80"
+      - "traefik.basic.protocol=http"
+      - "traefik.frontend.headers.frameDeny=false"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.isDevelopment=false"
+      - "traefik.frontend.headers.forceSTSHeader=false"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      - "traefik.frontend.headers.STSPreload=true"
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
