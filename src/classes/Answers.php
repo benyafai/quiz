@@ -35,7 +35,7 @@ class Answers extends Common {
             "P_ID" => $this->Player->G_ID,
         ]);
         $alreadyAnswered = $stmt->fetchColumn();
-        if ( !$alreadyAnswered ) {
+        if ( !$alreadyAnswered && $data['A_Answer'] ) {
             $sql = "INSERT INTO answers ( A_ID, G_ID, Q_ID, P_ID, A_Answer, A_Marked, A_Correct )
                     VALUES ( UUID(), :G_ID, :Q_ID, :P_ID, :A_Answer, :A_Marked, :A_Correct ) ";
             $stmt = $this->db->prepare ( $sql );
