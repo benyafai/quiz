@@ -1,7 +1,7 @@
 <a href=""><h1><?=$Game->G_Name?></h1></a>
 <a class="endQuiz" href="/end/<?=$Host->G_ID?>">End Quiz</a>
 <h3><?=$Host->P_Name?> (Host)</h3>
-<p>Join link: <input class="joinLink" type="text" value="https://<?=$_SERVER['HTTP_HOST']?>/join/<?=$Host->G_ID?>" /></p>
+<p>Join link: <input class="joinLink" type="text" value="https://<?=$_SERVER['HTTP_HOST']?>/game/<?=$Host->G_ID?>" /></p>
 <div class="hostScoring <?=$currentQuestion=='Begin'?'currentQuestion':''?>">
     <a class="setScoring" href="/setQuestion/Begin">Start page & Question editing</a><br /><br />
     <a class="showAnswers" href="/showAnswers/<?=$Game->G_ShowAnswers==1?0:1?>"><?=$Game->G_ShowAnswers==1?'Hide':'Show'?> answers to all players</a>
