@@ -84,8 +84,8 @@ class Questions extends Common {
                 die("We can't support that file type, go back and try again");
             }
         }
-        $sql = "INSERT INTO questions ( Q_ID, R_ID, Q_Question, Q_Answer, Q_Order, Q_Image_Question, Q_Image_Answer, Q_Sound_Question, Q_Sound_Answer, Q_Video_Question, Q_Video_Answer, Q_Points )
-                VALUES ( UUID(), :R_ID, :Q_Question, :Q_Answer, :Q_Order, :Q_Image_Question, :Q_Image_Answer, :Q_Sound_Question, :Q_Sound_Answer, :Q_Video_Question, :Q_Video_Answer, :Q_Points ); ";
+        $sql = "INSERT INTO questions ( Q_ID, R_ID, Q_Question, Q_Answer, Q_Order, Q_Image_Question, Q_Image_Answer, Q_Sound_Question, Q_Sound_Answer, Q_Video_Question, Q_Video_Answer, Q_Points, Q_Multi )
+                VALUES ( UUID(), :R_ID, :Q_Question, :Q_Answer, :Q_Order, :Q_Image_Question, :Q_Image_Answer, :Q_Sound_Question, :Q_Sound_Answer, :Q_Video_Question, :Q_Video_Answer, :Q_Points, :Q_Multi ); ";
         $stmt = $this->db->prepare( $sql );
         $stmt->execute([
             "R_ID" => $data['R_ID'], 
@@ -99,6 +99,7 @@ class Questions extends Common {
             "Q_Video_Question" => $video_q ? $video_q : null,
             "Q_Video_Answer" => $video_a ? $video_a : null,
             "Q_Points" => $data['Q_Points'],
+            "Q_Multi" => $data['Q_Multi'],
         ]);
     }
 
@@ -112,7 +113,7 @@ class Questions extends Common {
     }
 
     public function currentQuestion( $Q_ID ) {
-        $sql = "SELECT r.R_Round, r.R_Order, q.Q_ID, q.Q_Question, q.Q_Answer, q.Q_Order, q.Q_Image_Question, q.Q_Image_Answer, q.Q_Sound_Question, q.Q_Sound_Answer, q.Q_Video_Question, q.Q_Video_Answer
+        $sql = "SELECT r.R_Round, r.R_Order, q.Q_ID, q.Q_Question, q.Q_Answer, q.Q_Order, q.Q_Image_Question, q.Q_Image_Answer, q.Q_Sound_Question, q.Q_Sound_Answer, q.Q_Video_Question, q.Q_Video_Answer, q.Q_Multi
                 FROM questions q 
                 LEFT JOIN rounds r ON q.R_ID = r.R_ID
                 WHERE q.Q_ID = :Q_ID

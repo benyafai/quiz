@@ -26,6 +26,28 @@ button {
     padding: 0.5em 1em;
     margin: 0.5em 0em;
 }
+input[type="file"] {
+    width: 50%;
+}
+input[type="radio"] {
+    width: 20px;
+}
+label {
+    padding: 20px 30px;
+}
+#quizData input[type="radio"] {
+    display: none;
+}
+#quizData input[type="radio"] + label {
+    border: 1px solid grey;
+    float: left;
+    margin-right: 30px;
+}
+#quizData input[type="radio"]:checked,
+#quizData input[type="radio"]:checked + label {
+    background: GAINSBORO;
+}
+
 .Rounds,
 .Questions,
 .Answers {
@@ -140,5 +162,5 @@ p.ScoreData span {
     background: mediumaquamarine;
 }
 .Incorrect {
-    background: firebrick;
+    background: palevioletred;
 }

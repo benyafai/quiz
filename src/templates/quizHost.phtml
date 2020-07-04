@@ -42,8 +42,8 @@
                             </audio>
                         <?php } else if ( $Question->Q_Video_Answer ) { ?>
                             <video src="/uploads/<?=$Question->Q_Video_Answer?>" controls width="320" height="240"></video>
-                        <?php } else { ?>
-                            <?=$Question->Q_Answer?>
+                        <?php } else if ( $Question->Q_Multi == 1 ) { ?>
+                            <p>This is higher and lower question</p>
                         <?php } ?>
                     </p>
                     
@@ -74,7 +74,9 @@
                 <label for="Q_Question">Add Question to <?=$Round->R_Round?> round</label>
                 <input type="text" id="Q_Question" name="Q_Question" placeholder="Question" required/>
                 <input type="file" name="questionFile" />
-                <input type="text" id="" name="Q_Answer" placeholder="Answer (for you only, players will not see this)" required/>
+                <input type="radio" name="Q_Multi" id="Q_Multi_0" value="0" checked /><label for="Q_Multi_0">Normal</label>
+                <input type="radio" name="Q_Multi" id="Q_Multi_1" value="1" /><label for="Q_Multi_1">Higher / Lower</label>
+                <input type="text" id="" name="Q_Answer" placeholder="Answer" required/>
                 <input type="file" name="answerFile" />
                 <input type="number" id="Q_Points" name="Q_Points" placeholder="How many points is the answer worth?" min="1" max="5" required/>
                 <input type="hidden" name="R_ID" value="<?=$Round->R_ID?>" />

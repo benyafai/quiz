@@ -58,9 +58,14 @@ function doAjax() {
                         $('#quizData').append('<video src="/uploads/'+data.Q_Video_Answer+'" controls width="320" height="240"></video>');
                     }
                     if ( data.A_Answer ) {
-                        $('#quizData').append('<input class="'+data.Score+'" id="A_Answer" type="text" name="A_Answer" value="'+data.A_Answer+'" disabled />');
+                        $('#quizData').append('<input class="'+data.Score+'" id="A_Answer" type="text" name="A_Answer" value="Your answer: '+data.A_Answer+'" disabled />');
                     } else {
-                        $('#quizData').append('<input id="A_Answer" type="text" name="A_Answer" value="" required="required" autocomplete="off" onKeyPress="enterSubmit(event); autofocus" />');
+                        if ( data.Q_Multi ) {
+                            $('#quizData').append('<input type="radio" name="A_Answer" value="Higher" id="Higher" /><label for="Higher">Higher</label>');
+                            $('#quizData').append('<input type="radio" name="A_Answer" value="Lower" id="Lower" /><label for="Lower">Lower</label>');
+                        } else {
+                            $('#quizData').append('<input id="A_Answer" type="text" name="A_Answer" value="" required="required" autocomplete="off" onKeyPress="enterSubmit(event); autofocus" />');
+                        }
                         $('#quizData').append('<button id="Submit" type="Submit" onclick="submitForm();">Send Answer</button>');
                     }
                     if ( data.Q_Answer ) {

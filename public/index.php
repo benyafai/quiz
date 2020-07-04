@@ -16,6 +16,7 @@ $app->add(function (Request $request, RequestHandler $handler) {
 });
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, true, true);
+
 $app->post('/newgame', function (Request $request, Response $response) {
     $G = new Games();
     $data = $request->getParsedBody();
@@ -155,7 +156,7 @@ $app->map(['GET', 'POST'], '/ajax', function (Request $request, Response $respon
     if ( !$Player || !$Game ) { 
         setcookie('Player', null, time() -10, "/");
         $payload = [
-            "Refresh" => "Refresh",
+            "Refresh" => 1,
         ];
         $response->getBody()->write(json_encode($payload));
         return $response
@@ -164,13 +165,13 @@ $app->map(['GET', 'POST'], '/ajax', function (Request $request, Response $respon
     $currentQuestion = $G->currentQuestion();
     if ( $currentQuestion == 'Begin' ) {
         $payload = [
-            "Begin" => "Begin"
+            "Begin" => 1
         ];
     } else if ( $currentQuestion == 'Scoring' ) {
         $S = new Scores();
         $Scores = $S->allScores();
         $payload = [
-            "Scoring" => "Scoring",
+            "Scoring" => 1,
             "Me" => $Player->P_ID,
             "Scores" => $Scores,
         ];
@@ -194,6 +195,9 @@ $app->map(['GET', 'POST'], '/ajax', function (Request $request, Response $respon
             $payload["Q_Video_Question"] = $Question->Q_Video_Question;
         } else {
             $payload['Q_Question'] = $Question->Q_Question;    
+        }
+        if ( $Question->Q_Multi == 1 ) {
+            $payload['Q_Multi'] = 1;
         }
         if ( $Game->G_ShowAnswers == 1 ) {
             $payload["Q_Answer"] = "The answer: ".$Question->Q_Answer;
