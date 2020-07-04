@@ -22,69 +22,50 @@ function doAjax() {
             if ( data.Refresh ) {
                 window.location.href = '/';
             } else if ( data.Begin ) {
-                $('#quizPlayer').hide()
-                $('#Scoring').hide()
+                $('#Q_ID').val(null);
+                $('#quizData').html(null)
             } else if ( data.Scoring ) {
-                $('#quizPlayer').hide()
-                $('#Scoring').show()
-                $('#ScoreData').empty();
+                $('#Q_ID').val(null);
+                $('#quizData').html('<h2>Scores</h2>');
                 $.each(data.Scores, function(i, Score) {
-                    $('#ScoreData').append(
-                        `<p><span>${Score.P_Name}</span>${Score.A_Correct} / ${Score.Q_Possible}</p>`
+                    $('#quizData').append(
+                        `<p class="ScoreData"><span>${Score.P_Name}</span>${Score.A_Correct} / ${Score.Q_Possible}</p>`
                     );
                 });
             } else if ( data.Question_ID ) {
-                $('#quizPlayer').show()
-                $('#Scoring').hide()
-                if ( data.Q_Answer && data.Q_Answer.length ) {
-                    $('#Q_Answer').val(data.Q_Answer);
-                    $('#Q_Answer').show();
-                    if ( data.Q_Image_Answer && data.Q_Image_Answer.length ) {
-                        $('#Q_Image_Answer').show()
-                        $('#Q_Image_Answer').attr("src","/uploads/"+data.Q_Image_Answer);
-                    } else {
-                        $('#Q_Image_Answer').attr("src","");
-                        $('#Q_Image_Answer').hide()
-                    }
-                    if ( data.Q_Sound_Answer && data.Q_Sound_Answer.length ) {
-                        $('#Q_Sound_Answer').show()
-                        $('#Q_Sound_Answer').attr("src","/uploads/"+data.Q_Sound_Answer);
-                    } else {
-                        $('#Q_Sound_Answer').attr("src","");
-                        $('#Q_Sound_Answer').hide()
-                    }
-                } else {
-                    $('#Q_Answer').val('');
-                    $('#Q_Answer').hide();
-                    $('#Q_Image_Answer').hide();
-                    $('#Q_Sound_Answer').hide();
-                }
                 if ( data.Question_ID != $('#Q_ID').val() ) {
-                    $('#R_Round').text(data.R_Round);
-                    $('#Q_Question').text(data.Q_Question);
                     $('#Q_ID').val(data.Question_ID);
-                    if ( data.Q_Image_Question && data.Q_Image_Question.length ) {
-                        $('#Q_Image_Question').show()
-                        $('#Q_Image_Question').attr("src","/uploads/"+data.Q_Image_Question);
-                    } else {
-                        $('#Q_Image_Question').hide()
+                    $('#quizData').html('<h2 id="R_Round">'+data.R_Round+'</h2>');
+                    if ( data.Q_Question ) {
+                        $('#quizData').append('<h3 id="Q_Question">'+data.Q_Question+'</h3>');
                     }
-                    if ( data.Q_Sound_Question && data.Q_Sound_Question.length ) {
-                        $('#Q_Sound_Question').attr("src","/uploads/"+data.Q_Sound_Question);
-                        $('#Q_Sound_Question').show()
-                    } else {
-                        $('#Q_Sound_Question').hide()
+                    if ( data.Q_Image_Question ) {
+                        $('#quizData').append('<img id="Q_Image_Question" class="playerImage" src="/uploads/'+data.Q_Image_Question+'" />');
                     }
-                    if ( data.A_Answer && data.A_Answer.length ) {
-                        $('#A_Answer').val(data.A_Answer);
-                        $('#A_Answer').prop('disabled', true);
-                        $('#Submit').hide()
+                    if ( data.Q_Sound_Question ) {
+                        $('#quizData').append('<audio controls><source src="/uploads/'+data.Q_Sound_Question+'" type="audio/mp4"></audio>');
+                    }
+                    if ( data.Q_Video_Question ) {
+                        $('#quizData').append('<video src="/uploads/'+data.Q_Video_Question+'" controls width="320" height="240"></video>');
+                    }
+                    if ( data.Q_Image_Answer ) {
+                        $('#quizData').append('<img id="Q_Image_Answer" class="playerImage" src="/uploads/'+data.Q_Image_Answer+'" />');
+                    }
+                    if ( data.Q_Sound_Answer ) {
+                        $('#quizData').append('<audio controls><source src="/uploads/'+data.Q_Sound_Answer+'" type="audio/mp4"></audio>');
+                    }
+                    if ( data.Q_Video_Answer ) {
+                        $('#quizData').append('<video src="/uploads/'+data.Q_Video_Answer+'" controls width="320" height="240"></video>');
+                    }
+                    if ( data.A_Answer ) {
+                        $('#quizData').append('<input class="'+data.Score+'" id="A_Answer" type="text" name="A_Answer" value="'+data.A_Answer+'" disabled />');
                     } else {
-                        $('#A_Answer').val('');
-                        $('#A_Answer').prop('disabled', false);
-                        $('#Submit').show()
-                        $('#A_Answer').focus()
-                    } 
+                        $('#quizData').append('<input id="A_Answer" type="text" name="A_Answer" value="" required="required" autocomplete="off" onKeyPress="enterSubmit(event); autofocus" />');
+                        $('#quizData').append('<button id="Submit" type="Submit" onclick="submitForm();">Send Answer</button>');
+                    }
+                    if ( data.Q_Answer ) {
+                        $('#quizData').append('<input id="Q_Answer" type="text" value="'+data.Q_Answer+'" disabled />');
+                    }
                 }
             }
         },

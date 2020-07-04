@@ -7,7 +7,7 @@
     <a class="showAnswers" href="/showAnswers/<?=$Game->G_ShowAnswers==1?0:1?>"><?=$Game->G_ShowAnswers==1?'Hide':'Show'?> answers to all players</a>
 </div>
 <div class="answerMessage" style="display:<?=$Game->G_ShowAnswers==1?'block':'none'?>;">
-    <p>Players can see the answers!</p>
+    <p>Players can see the answers! <a href="/showAnswers/0">Hide Them</a></p>
 </div>
 <hr />
 <?php foreach ( $Rounds as $Round ) : ?>
@@ -17,25 +17,36 @@
             <?php if ( $Question->R_ID == $Round->R_ID ) : ?>
                 <div class="quizHost Questions <?=$currentQuestion==$Question->Q_ID?'currentQuestion':''?>" id="<?=$currentQuestion==$Question->Q_ID?'scroll':''?>">
                     <input type="hidden" name="Q_ID" value="<?=$Question->Q_ID?>" />
-                    <?php if ( $Question->Q_Image_Question ) { ?>
-                        <p class="Question"><img class="hostImage" src="/uploads/<?=$Question->Q_Image_Question?>" />
-                            <?php if ( $Question->Q_Image_Answer ) { ?>
-                                <img class="hostImage" src="/uploads/<?=$Question->Q_Image_Answer?>" />
-                            <?php } ?>
-                        </p>
-                    <?php } else if ( $Question->Q_Sound_Question ) { ?>
-                        <p class="Question"><?=$Question->Q_Order?>)</p>
-                        <audio controls>
-                            <source src="/uploads/<?=$Question->Q_Sound_Question?>" type="audio/mp4">
-                            Your browser does not support the audio element.
-                        </audio>
-                        <audio controls>
-                            <source src="/uploads/<?=$Question->Q_Sound_Answer?>" type="audio/mp4">
-                            Your browser does not support the audio element.
-                        </audio>
-                    <?php } else { ?>
-                        <p class="Question"><?=$Question->Q_Question?></p>
-                    <?php } ?>
+                    <p class="Question">
+                        <?php if ( $Question->Q_Image_Question ) { ?>
+                            <img class="hostImage" src="/uploads/<?=$Question->Q_Image_Question?>" />
+                        <?php } else if ( $Question->Q_Sound_Question ) { ?>
+                            <audio controls>
+                                <source src="/uploads/<?=$Question->Q_Sound_Question?>" type="audio/mp4">
+                                Your browser does not support the audio element.
+                            </audio>
+                        <?php } else if ( $Question->Q_Video_Question ) { ?>
+                            <audio controls>
+                                <source src="/uploads/<?=$Question->Q_Sound_Question?>" type="audio/mp4">
+                                Your browser does not support the audio element.
+                            </audio>
+                        <?php } else { ?>
+                            <?=$Question->Q_Question?>
+                        <?php } ?>
+                        <?php if ( $Question->Q_Image_Answer ) { ?>
+                            <img class="hostImage" src="/uploads/<?=$Question->Q_Image_Answer?>" />
+                        <?php } else if ( $Question->Q_Sound_Answer ) { ?>
+                            <audio controls>
+                                <source src="/uploads/<?=$Question->Q_Sound_Answer?>" type="audio/mp4">
+                                Your browser does not support the audio element.
+                            </audio>
+                        <?php } else if ( $Question->Q_Video_Answer ) { ?>
+                            <video src="/uploads/<?=$Question->Q_Video_Answer?>" controls width="320" height="240"></video>
+                        <?php } else { ?>
+                            <?=$Question->Q_Answer?>
+                        <?php } ?>
+                    </p>
+                    
                     <p class="TheAnswer">( Our Answer: <?=$Question->Q_Answer?> ) ( Max Points: <?=$Question->Q_Points?> )</p>
                     <a class="setQuestion" href="/setQuestion/<?=$Question->Q_ID?>">Set Current Question</a>
                     <a class="getAnswers" href="/">Refresh Answers</a>

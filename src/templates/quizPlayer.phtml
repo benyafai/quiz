@@ -1,30 +1,11 @@
 <a href=""><h1><?=$Game->G_Name?></h1></a>
 <h3><?=$Player->P_Name?></h3>
 <hr />
-<div id="quizPlayer">
-    <h2 id="R_Round"></h2>
-    <h3 id="Q_Question"></h3>
-    <img id="Q_Image_Question" class="playerImage" src="" />
-    <img id="Q_Image_Answer" class="playerImage" src="" />
-    <audio id="Q_Sound_Question" controls>
-        <source src="" type="audio/mp4">
-        Your browser does not support the audio element.
-    </audio>
-    <audio id="Q_Sound_Answer" controls>
-        <source src="" type="audio/mp4">
-        Your browser does not support the audio element.
-    </audio>
-    <form name="quizPlayer" action="/game/<?=$Game->G_ID?>" method="post" onsubmit="return false">
-        <input id="A_Answer" type="text" name="A_Answer" value="" required="required" autocomplete="off" onKeyPress="enterSubmit(event);" />
-        <input id="Q_ID" type="hidden" name="Q_ID" value="" />
-        <button id="Submit" type="Submit" onclick="submitForm();">Send Answer</button>
-    </form>
-    <input id="Q_Answer" type="text" value="" disabled />
-</div>
-<div id="Scoring">
-    <h2>Scores</h2>
-    <div id="ScoreData">
+<form name="quizPlayer" action="/game/<?=$Game->G_ID?>" method="post" onsubmit="return false">
+    <input id="Q_ID" type="hidden" name="Q_ID" value="" />
+    <div id="quizData">
+
     </div>
-</div>
+</form>
 <script src="/js/jQuery.js"></script>
 <script src="/js/players.js"></script>

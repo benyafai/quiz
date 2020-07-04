@@ -72,15 +72,6 @@ p.TheAnswer {
 .Answers:last-child {
     border-bottom: none;
 }
-#quizPlayer,
-#Scoring,
-#Q_Image_Question,
-#Q_Image_Answer,
-#Q_Sound_Question, 
-#Q_Sound_Answer,
-#Q_Answer {
-    display: none;
-}
 .hostScoring {
     padding: 0.5em 0em 0.5em 1em;
 }
@@ -126,7 +117,7 @@ table tbody tr td:first-of-type {
     border-top: 0.2em solid black;
     margin-top: 2em;
 }
-#ScoreData p span {
+p.ScoreData span {
     width: 30vw;
     display: inline-block;
 }
@@ -144,4 +135,10 @@ table tbody tr td:first-of-type {
 .answerMessage p {
     background: white;
     color: firebrick;
+}
+.Correct {
+    background: mediumaquamarine;
+}
+.Incorrect {
+    background: firebrick;
 }

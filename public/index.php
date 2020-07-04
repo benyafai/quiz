@@ -181,25 +181,36 @@ $app->map(['GET', 'POST'], '/ajax', function (Request $request, Response $respon
         $Answer = $A->getAnswer( $currentQuestion );
         $payload = [
             "R_Round" => $Question->R_Round,
-            "Q_Question" => "",
             "Question_ID" => $Question->Q_ID,
-            "A_Answer" => $Answer->A_Answer,
         ];
+        if ( $Answer->A_Answer ) {
+            $payload["A_Answer"] = $Answer->A_Answer;
+        }
         if ( $Question->Q_Image_Question ) {
             $payload["Q_Image_Question"] = $Question->Q_Image_Question;
-            if ( $Game->G_ShowAnswers == 1 && $Question->Q_Image_Answer ) {
-                $payload["Q_Image_Answer"] = $Question->Q_Image_Answer;
-            }
         } else if ( $Question->Q_Sound_Question ) {
             $payload["Q_Sound_Question"] = $Question->Q_Sound_Question;
-            if ( $Game->G_ShowAnswers == 1 && $Question->Q_Sound_Answer ) {
-                $payload["Q_Sound_Answer"] = $Question->Q_Sound_Answer;
-            }
+        } else if ( $Question->Q_Video_Question ) {
+            $payload["Q_Video_Question"] = $Question->Q_Video_Question;
         } else {
-            $payload['Q_Question'] .= $Question->Q_Question;    
+            $payload['Q_Question'] = $Question->Q_Question;    
         }
         if ( $Game->G_ShowAnswers == 1 ) {
             $payload["Q_Answer"] = "The answer: ".$Question->Q_Answer;
+            if ( $Question->Q_Image_Answer ) {
+                $payload["Q_Image_Answer"] = $Question->Q_Image_Answer;
+            } else if ( $Question->Q_Sound_Answer ) {
+                $payload["Q_Sound_Answer"] = $Question->Q_Sound_Answer;
+            } else if ( $Question->Q_Video_Answer ) {
+                $payload["Q_Video_Answer"] = $Question->Q_Video_Answer;
+            }
+            if ( $Answer->A_Marked == 1 && $Answer->A_Correct > 0 ) {
+                $payload["Score"] = "Correct";
+            } else if ( $Answer->A_Marked == 1 && $Answer->A_Correct == 0 ) {
+                $payload["Score"] = "Incorrect";
+            } else {
+                $payload["Score"] = "Waiting";
+            }
         }
     }
     $response->getBody()->write(json_encode($payload));

@@ -66,6 +66,8 @@ class Questions extends Common {
                 $image_q = $this->moveUploadedFile( $questionFile );
             } else if ( $questionFile->getClientMediaType() == 'audio/x-m4a' ) {
                 $sound_q = $this->moveUploadedFile( $questionFile );
+            } else if ( $questionFile->getClientMediaType() == 'video/mp4' ) {
+                $video_q = $this->moveUploadedFile( $questionFile );
             } else {
                 die("We can't support that file type, go back and try again");
             }
@@ -76,6 +78,8 @@ class Questions extends Common {
                 $image_a = $this->moveUploadedFile( $answerFile );
             } else if ( $answerFile->getClientMediaType() == 'audio/x-m4a' ) {
                 $sound_a = $this->moveUploadedFile( $answerFile );
+            } else if ( $answerFile->getClientMediaType() == 'video/mp4' ) {
+                $video_a = $this->moveUploadedFile( $answerFile );
             } else {
                 die("We can't support that file type, go back and try again");
             }
@@ -93,7 +97,7 @@ class Questions extends Common {
             "Q_Sound_Question" => $sound_q ? $sound_q : null,
             "Q_Sound_Answer" => $sound_a ? $sound_a : null,
             "Q_Video_Question" => $video_q ? $video_q : null,
-            "Q_Video_Answer" => $video_q ? $video_a : null,
+            "Q_Video_Answer" => $video_a ? $video_a : null,
             "Q_Points" => $data['Q_Points'],
         ]);
     }
@@ -108,7 +112,7 @@ class Questions extends Common {
     }
 
     public function currentQuestion( $Q_ID ) {
-        $sql = "SELECT r.R_Round, r.R_Order, q.Q_ID, q.Q_Question, q.Q_Answer, q.Q_Order, q.Q_Image_Question, q.Q_Image_Answer, q.Q_Sound_Question, q.Q_Sound_Answer
+        $sql = "SELECT r.R_Round, r.R_Order, q.Q_ID, q.Q_Question, q.Q_Answer, q.Q_Order, q.Q_Image_Question, q.Q_Image_Answer, q.Q_Sound_Question, q.Q_Sound_Answer, q.Q_Video_Question, q.Q_Video_Answer
                 FROM questions q 
                 LEFT JOIN rounds r ON q.R_ID = r.R_ID
                 WHERE q.Q_ID = :Q_ID
